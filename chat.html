@@ -70,11 +70,17 @@
     <p>2023@powerd by Bosco</p>
   </center>
   <script>
-    const database = {
-      "你好": "你好！请问有什么可以帮助你的？",
-      "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
-      "你是谁": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？"
-    };
+const database = {
+  "你好": function(message) {
+    if (message.length <= 3) {
+      return "你好！请问有什么可以帮助你的？";
+    } else {
+      return null;
+    }
+  },
+  "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
+  "你是谁": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？"
+};
 
     const chatbox = document.getElementById("chat-box");
     const inputBox = document.getElementById("inputBox");
