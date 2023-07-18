@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bosco AI绘图</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #image-container {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+
+        /* 晚上模式 */
+        body.night-mode {
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* 早上模式 */
+        body.morning-mode {
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bosco AI绘图</h1>
+        <p>请输入图像描述:</p>
+        <input id="input" type="text" placeholder="请尽量详细和用英文描述">
+        <button id="generate">生成图像</button>
+        <div>
+            <img id="image-container" src="" alt="">
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var currentTime = new Date();
+            var currentHour = currentTime.getHours();
+
+            if (currentHour >= 18 || currentHour < 5) {
+                $('body').addClass('night-mode');
+            } else {
+                $('body').addClass('morning-mode');
+            }
+
+            $('#generate').click(function() {
+                // AJAX 请求和处理代码
+            });
+        });
+    </script>
+      <script>
+        $(document).ready(function() {
+            $('#generate').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "https://openai.1rmb.tk/v1/images/generations",
+                    headers: {
+                        "Authorization": "Bearer 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",
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        "model": "image-alpha-001",
+                        "prompt": $('#input').val(),
+                        "num_images": 1,
+                        "size": "512x512",
+                        "response_format": "url"
+                    }),
+                    success: function(response) {
+                        $('#image-container').attr('src', response.data[0].url);
+                    },
+                    error: function(error) {
+                        alert('生成图像失败： ' + error.statusText);
+                    }
+                });
+            });
+        });
+    </script>
+  <div style="text-align:center;">
+  <h6>更多免费开源AI服务：lhygpt.github.io</h6>
+</div>
+</body>
+</html>
