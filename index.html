@@ -72,11 +72,9 @@
   <script>
 const database = {
   "你好": "你好！请问有什么可以帮助你的？",
-  "你": "你好！请问有什么可以帮助你的？",
-  "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
   "你是谁": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？",
-  "你的年龄": "我是一个虚拟机器人，没有年龄",
-  // 添加更多的键值对...
+  "你是啥": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？",
+  "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
 };
 
 const chatbox = document.getElementById("chat-box");
@@ -106,16 +104,12 @@ function processUserInput() {
 
     let reply = "";
 
-if (userInput.includes("你好") && userInput.length <= 3) {
-  reply = database["你好"];
-} else if ((userInput.includes("时间") || userInput.includes("几点")) && userInput.length <= 5) {
-  reply = database["时间"];
-} else if (userInput.includes("你是谁") && userInput.length <= 5) {
-  reply = database["你是谁"];
-} else if (userInput.includes("你的年龄") && userInput.length <= 6) {
-  reply = database["你的年龄"];
-}
-// 添加更多的判断条件...
+    for (const key in database) {
+      if (userInput.includes(key)) {
+        reply = database[key];
+        break;
+      }
+    }
 
     if (reply) {
       setTimeout(() => {
@@ -142,5 +136,4 @@ inputBox.addEventListener("keydown", (event) => {
     processUserInput();
   }
 });
-
 </script> </body> </html>
