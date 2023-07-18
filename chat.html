@@ -71,73 +71,73 @@
     <p>2023@powerd by Bosco</p>
   </center>
   <script>
-    const database = {
-      "你好": function(message) {
-        if (message.length <= 3) {
-          return "你好！请问有什么可以帮助你的？";
-        } else {
-          return null;
-        }
-      },
-      "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
-      "你是谁": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？"
-    };
+const database = {
+  "你好": function(message) {
+    if (message.includes("你好") && message.length <= 3) {
+      return "你好！请问有什么可以帮助你的？";
+    } else {
+      return null;
+    }
+  },
+  "时间": `当前时间是 ${new Date().toLocaleTimeString()}`,
+  "你是谁": "你好，我是B哥AI模型，由BoscoAI开发，请问有什么可以帮助你的？"
+};
 
-    const chatbox = document.getElementById("chat-box");
-    const inputBox = document.getElementById("inputBox");
-    const sendButton = document.getElementById("sendButton");
-    const feedbackLink = document.createElement("a");
+const chatbox = document.getElementById("chat-box");
+const inputBox = document.getElementById("inputBox");
+const sendButton = document.getElementById("sendButton");
+const feedbackLink = document.createElement("a");
 
-    feedbackLink.href = "https://v.2weima.com/diy.html?h5=1&qr_scene=pVL66L-gm966L-7142F2";
-    feedbackLink.style.color = "red";
-    feedbackLink.style.textDecoration = "none";
-    feedbackLink.innerHTML = "【点此】反馈";
+feedbackLink.href = "https://v.2weima.com/diy.html?h5=1&qr_scene=pVL66L-gm966L-7142F2";
+feedbackLink.style.color = "red";
+feedbackLink.style.textDecoration = "none";
+feedbackLink.innerHTML = "【点此】反馈";
 
-    function addMessageToChatbox(message, sender) {
-      const messageElement = document.createElement("div");
-      messageElement.textContent = `${sender}: ${message}`;
-      messageElement.classList.add("message");
-      messageElement.classList.add(sender.toLowerCase());
-      chatbox.appendChild(messageElement);
+function addMessageToChatbox(message, sender) {
+  const messageElement = document.createElement("div");
+  messageElement.textContent = `${sender}: ${message}`;
+  messageElement.classList.add("message");
+  messageElement.classList.add(sender.toLowerCase());
+  chatbox.appendChild(messageElement);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function processUserInput() {
+  const userInput = inputBox.value.trim();
+  if (userInput !== "") {
+    addMessageToChatbox(userInput, "User");
+    inputBox.value = "";
+
+    let reply = null;
+    if (database.hasOwnProperty("你好")) {
+      reply = database["你好"](userInput);
+    }
+
+    if (reply) {
+      setTimeout(() => {
+        addMessageToChatbox(reply, "Chatbot");
+      }, 500);
+    } else {
+      const replyElement = document.createElement("div");
+      replyElement.classList.add("message");
+      replyElement.classList.add("chatbot");
+      const replyText = document.createElement("span");
+      replyText.innerHTML = "抱歉，我不太明白你的意思。您可以尝试问其他问题或者";
+      replyElement.appendChild(replyText);
+      replyElement.appendChild(feedbackLink.cloneNode(true));
+      chatbox.appendChild(replyElement);
       chatbox.scrollTop = chatbox.scrollHeight;
     }
+  }
+}
 
-    function processUserInput() {
-      const userInput = inputBox.value.trim();
-      if (userInput !== "") {
-        addMessageToChatbox(userInput, "User");
-        inputBox.value = "";
+sendButton.addEventListener("click", processUserInput);
 
-        let reply = null;
-        if (database.hasOwnProperty("你好")) {
-          reply = database["你好"](userInput);
-        }
-
-        if (reply) {
-          setTimeout(() => {
-            addMessageToChatbox(reply, "Chatbot");
-          }, 500);
-        } else {
-          const replyElement = document.createElement("div");
-          replyElement.classList.add("message");
-          replyElement.classList.add("chatbot");
-          const replyText = document.createElement("span");
-          replyText.innerHTML = "抱歉，我不太明白你的意思。您可以尝试问其他问题或者";
-          replyElement.appendChild(replyText);
-          replyElement.appendChild(feedbackLink.cloneNode(true));
-          chatbox.appendChild(replyElement);
-          chatbox.scrollTop = chatbox.scrollHeight;
-        }
-      }
-    }
-
-    sendButton.addEventListener("click", processUserInput);
-
-    inputBox.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        processUserInput();
-      }
-    });
+inputBox.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    processUserInput();
+  }
+});
   </script>
 </body>
 </html>
