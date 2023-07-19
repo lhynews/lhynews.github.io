@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        #chatbox {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="chatbox"></div>
+        <input type="text" id="userinput" placeholder="输入消息...">
+        <button onclick="sendMessage()">发送</button>
+    </div>
+
+    <script>
+        // 定义本地数据库
+        let database = [];
+
+        // 获取页面元素
+        let chatbox = document.getElementById("chatbox");
+        let userinput = document.getElementById("userinput");
+
+        // 发送消息
+        function sendMessage() {
+            let message = userinput.value;
+            if (message !== "") {
+                // 将用户消息显示在聊天框中
+                displayMessage("User: " + message);
+
+                // 处理用户消息
+                let response = getResponse(message);
+
+                // 将回复消息显示在聊天框中
+                displayMessage("Bot: " + response);
+
+                // 清空输入框
+                userinput.value = "";
+            }
+        }
+
+        // 显示消息在聊天框中
+        function displayMessage(message) {
+            let p = document.createElement("p");
+            p.textContent = message;
+            chatbox.appendChild(p);
+        }
+
+        // 获取回复消息
+        function getResponse(message) {
+            // 在本地数据库中查找回复
+            for (let i = 0; i < database.length; i++) {
+                if (database[i].question === message) {
+                    return database[i].answer;
+                }
+            }
+            return "抱歉，我无法回答您的问题。";
+        }
+
+        // 示例：添加一些问题和回答到本地数据库
+        database.push({ question: "你好", answer: "你好！" });
+        database.push({ question: "你是谁", answer: "我是一个聊天机器人。" });
+        database.push({ question: "天气如何", answer: "今天天气晴朗，温度约为25摄氏度。" });
+    </script>
+</body>
+</html>
