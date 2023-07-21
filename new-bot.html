@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rule-Based Chatbot</title>
+    <style>
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        .message {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rule-Based Chatbot</h1>
+    <div id="chatbox">
+        <div class="message">Bot: Hi there! How can I help you?</div>
+    </div>
+    <input type="text" id="userInput" placeholder="Type your message here...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        // Rule-based chatbot
+        function typeResponse(message, index, responseDiv) {
+            if (index < message.length) {
+                responseDiv.innerText += message.charAt(index);
+                setTimeout(function() {
+                    typeResponse(message, index + 1, responseDiv);
+                }, 20); // 0.02 seconds delay between characters
+            }
+        }
+
+        function generateResponse(userInput) {
+            // Convert user input to lowercase for case-insensitive matching
+            userInput = userInput.toLowerCase();
+
+            // Define the rules and corresponding responses
+            var rules = [
+                { pattern: "你好", response: "你好！有什么可以帮你的？" },
+                { pattern: "你叫什么名字", response: "我是聊天机器人。" },
+                { pattern: "喜欢(.*)", response: "我也喜欢$1！" },
+                { pattern: "笑话", response: "为什么八卦的人过得很快？因为……一边走，一边问！" },
+                { pattern: "再见", response: "再见，祝你有美好的一天！" },
+                { pattern: "天气如何", response: "今天天气晴朗，适合出门活动。" },
+                { pattern: "足球比赛结果", response: "昨天的足球比赛中，蓝队赢得了胜利。" },
+                { pattern: "法国的首都是哪里", response: "法国的首都是巴黎。" },
+                { pattern: "如何制作蛋糕", response: "制作蛋糕的步骤很简单，你可以搜索相关食谱。" },
+                { pattern: "好餐厅在哪里", response: "你可以尝试去市中心附近寻找一些高评价的餐厅。" },
+                { pattern: "有趣的事实", response: "在短短的一秒钟内，蜻蜓可以跳一英尺高。" },
+                { pattern: "你最喜欢的颜色是什么", response: "我是一个机器人，没有喜好，但我喜欢五彩斑斓的颜色。" },
+                { pattern: "生命的意义是什么", response: "生命的意义是每个人都有不同的理解，你可以思考自己的人生。" },
+                { pattern: "你有兄弟姐妹吗", response: "作为机器人，我没有兄弟姐妹。" },
+                // Add more rules here...
+                { pattern: ".*", response: "抱歉，我不明白。你能重新表达一下吗？" } // Default response
+            ];
+
+            // Find a matching rule and return the corresponding response
+            for (var i = 0; i < rules.length; i++) {
+                var rule = rules[i];
+                var regex = new RegExp(rule.pattern);
+                if (regex.test(userInput)) {
+                    return rule.response;
+                }
+            }
+
+            return "抱歉，我不明白。你能重新表达一下吗？"; // Default response
+        }
+
+        function appendMessage(message, sender) {
+            var chatbox = document.getElementById("chatbox");
+            var messageDiv = document.createElement("div");
+            messageDiv.className = "message " + sender;
+            messageDiv.innerText = message;
+            chatbox.appendChild(messageDiv);
+        }
+
+        function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            appendMessage("你: " + userInput, "user");
+            document.getElementById("userInput").value = "";
+
+            var response = generateResponse(userInput);
+
+            // Show the typing effect for the response
+            var chatbox = document.getElementById("chatbox");
+            var responseDiv = document.createElement("div");
+            responseDiv.className = "message bot";
+            chatbox.appendChild(responseDiv);
+
+            typeResponse("机器人: " + response, 0, responseDiv);
+        }
+    </script>
+</body>
+</html>
