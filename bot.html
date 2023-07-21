@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rule-Based Chatbot</title>
+    <style>
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        .message {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h6>Rule-Based Chatbot</h6>
+    <div id="chatbox">
+        <div class="message">Bot: Hi there! How can I help you?</div>
+    </div>
+    <input type="text" id="userInput" placeholder="Type your message here...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        // Rule-based chatbot
+        function generateResponse(userInput) {
+            // Convert user input to lowercase for case-insensitive matching
+            userInput = userInput.toLowerCase();
+
+            // Define the rules and corresponding responses
+            var rules = [
+                { pattern: "你好", response: "你好！有什么可以帮你的？" },
+                { pattern: "你叫", response: "我是聊天机器人。" },
+                { pattern: "喜欢(.*)", response: "我也喜欢$1！" },
+                { pattern: "笑话", response: "为什么八卦的人过得很快？因为……一边走，一边问！" },
+                { pattern: "再见", response: "再见，祝你有美好的一天！" },
+                // Add more rules here...
+                { pattern: ".*", response: "抱歉，我不明白。你能重新表达一下吗？" } // Default response
+            ];
+
+            // Find a matching rule and return the corresponding response
+            for (var i = 0; i < rules.length; i++) {
+                var rule = rules[i];
+                var regex = new RegExp(rule.pattern);
+                if (regex.test(userInput)) {
+                    return rule.response;
+                }
+            }
+
+            return "抱歉，我不明白。你能重新表达一下吗？"; // Default response
+        }
+
+        function appendMessage(message, sender) {
+            var chatbox = document.getElementById("chatbox");
+            var messageDiv = document.createElement("div");
+            messageDiv.className = "message " + sender;
+            messageDiv.innerText = message;
+            chatbox.appendChild(messageDiv);
+        }
+
+        function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            appendMessage("你: " + userInput, "user");
+            document.getElementById("userInput").value = "";
+
+            var response = generateResponse(userInput);
+            appendMessage("机器人: " + response, "bot");
+        }
+    </script>
+</body>
+</html>
